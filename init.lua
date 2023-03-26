@@ -8,6 +8,7 @@ require('packer').startup(function()
     use 'hrsh7th/nvim-compe' -- auto completion plugin
     use 'altercation/vim-colors-solarized' -- Solarized theme for VIM
     use 'jeffkreeftmeijer/vim-numbertoggle' -- toggles the line number display between relative and absolute 
+    use 'nvim-tree/nvim-tree.lua' -- File explorer tree
 end)
 
 -- Indentation configurations
@@ -24,6 +25,25 @@ vim.cmd('syntax enable')
 vim.cmd('set background=dark')
 vim.cmd('colorscheme solarized')
 
+
+-- Setup file explorer
+
+-- disable netrw at the very start of your init.lua (strongly advised by the official docs)
+vim.g.loaded_netrw = 1
+vim.g.loaded_netrwPlugin = 1
+
+-- setup with some options
+require("nvim-tree").setup({
+  sort_by = "case_sensitive",
+  renderer = {
+    group_empty = true,
+  },
+  filters = {
+    dotfiles = true,
+  },
+})
+
+vim.cmd('NvimTreeToggle') -- open tree by default 
 
 -- Show Line number
 vim.cmd('set number')
@@ -46,4 +66,7 @@ function OnDemandCompletion()
 end
 
 -- Bind the completion function to a key mapping
-vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a', { noremap = true, silent = true })
+local opts =  { noremap = true, silent = true }
+vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a', opts) -- maps autocomplete to "ctrl-space"
+vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh', opts) -- maps tree refresh to "ctrl-l"
+vim.api.nvim_set_keymap('n', '<C-t>', ':NvimTreeToggle', opts) -- maps tree toggle to "ctrl-t"
