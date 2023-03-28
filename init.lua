@@ -9,6 +9,8 @@ require('packer').startup(function()
     use 'altercation/vim-colors-solarized' -- Solarized theme for VIM
     use 'jeffkreeftmeijer/vim-numbertoggle' -- toggles the line number display between relative and absolute 
     use 'nvim-tree/nvim-tree.lua' -- File explorer tree
+    use 'prettier/vim-prettier'
+    use 'dense-analysis/ale' -- for linting
 end)
 
 -- Indentation configurations
@@ -70,3 +72,19 @@ local opts =  { noremap = true, silent = true }
 vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a', opts) -- maps autocomplete to "ctrl-space"
 vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh', opts) -- maps tree refresh to "ctrl-l"
 vim.api.nvim_set_keymap('n', '<C-t>', ':NvimTreeToggle', opts) -- maps tree toggle to "ctrl-t"
+
+-- run lint fix for ts and js on file save 
+vim.cmd([[
+  let g:ale_fixers = {
+  \ 'javascript': ['eslint'],
+  \ 'typescript': ['eslint'],
+  \ 'json': ['prettier'],
+  \ 'typescriptreact': ['eslint'],
+  \ }  
+]])
+
+vim.cmd("let g:ale_sign_error = '❌'")
+vim.cmd("let g:ale_sign_warning = '⚠️'")
+vim.cmd('let g:ale_fix_on_save = 1')
+vim.cmd('let g:ale_lint_on_save = 1')
+
