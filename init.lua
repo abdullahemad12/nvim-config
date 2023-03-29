@@ -13,6 +13,9 @@ require('packer').startup(function()
     use 'dense-analysis/ale' -- for linting
 end)
 
+local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
+local autocmd = vim.api.nvim_create_autocmd   -- Create autocommand
+
 -- Indentation configurations
 vim.opt.autoindent = true
 vim.opt.shiftwidth = 2
@@ -47,13 +50,24 @@ require("nvim-tree").setup({
 
 vim.cmd('NvimTreeToggle') -- open tree by default 
 
--- Show Line number
-vim.cmd('set number')
+-- Show Line number 
+vim.opt.number = true
+vim.opt.relativenumber = true
 
--- this is useful when jumping to specific. Say you 
--- want to jump to line 45 that is 3 lines relative to the line number
--- you can use  3k or 3j and vim would show you 3 then
-vim.cmd('set relativenumber')
+-- (this ensures that the line number is set for any new buffer opened/created)
+autocmd('BufEnter', {
+  pattern = '',
+  command = 'set number'
+})
+
+autocmd('BufEnter', {
+  pattern = '',
+  command = 'set relativenumber'
+})
+
+
+-- autocmd BufEnter * set relativenumber
+
 
 --require('solarized').set()
 -- Set up mappings for LSP-based autocompletion
@@ -70,8 +84,9 @@ end
 -- Bind the completion function to a key mapping
 local opts =  { noremap = true, silent = true }
 vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a', opts) -- maps autocomplete to "ctrl-space"
-vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh', opts) -- maps tree refresh to "ctrl-l"
-vim.api.nvim_set_keymap('n', '<C-t>', ':NvimTreeToggle', opts) -- maps tree toggle to "ctrl-t"
+vim.api.nvim_set_keymap('i', '<C-i>', '<Esc>:lua vim.lsp.buf.code_action()<CR>a', opts)
+vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh<CR>', opts) -- maps tree refresh to "ctrl-l"
+vim.api.nvim_set_keymap('n', '<C-t>', ':NvimTreeToggle<CR>', opts) -- maps tree toggle to "ctrl-t"
 
 -- run lint fix for ts and js on file save 
 vim.cmd([[
