@@ -7,7 +7,7 @@ require('packer').startup(function()
     use 'neovim/nvim-lspconfig' -- Configurations for Nvim LSP
     use 'hrsh7th/nvim-compe' -- auto completion plugin
     use 'altercation/vim-colors-solarized' -- Solarized theme for VIM
-    use 'jeffkreeftmeijer/vim-numbertoggle' -- toggles the line number display between relative and absolute 
+    use 'jeffkreeftmeijer/vim-numbertoggle' -- toggles the line number display between relative and absolute
     use 'nvim-tree/nvim-tree.lua' -- File explorer tree
     use 'prettier/vim-prettier'
     use 'dense-analysis/ale' -- for linting
@@ -19,7 +19,7 @@ local autocmd = vim.api.nvim_create_autocmd   -- Create autocommand
 -- Indentation configurations
 vim.opt.autoindent = true
 vim.opt.shiftwidth = 2
-vim.opt.smarttab = true 
+vim.opt.smarttab = true
 
 -- LSP Configurations
 require'lspconfig'.kotlin_language_server.setup {}
@@ -48,9 +48,9 @@ require("nvim-tree").setup({
   },
 })
 
-vim.cmd('NvimTreeToggle') -- open tree by default 
+vim.cmd('NvimTreeToggle') -- open tree by default
 
--- Show Line number 
+-- Show Line number
 vim.opt.number = true
 vim.opt.relativenumber = true
 
@@ -66,7 +66,7 @@ autocmd('BufEnter', {
 })
 
 
--- remove trailing spaces on save 
+-- remove trailing spaces on save
 vim.api.nvim_create_autocmd({ "BufWritePre" }, {
   pattern = { "*" },
   command = [[%s/\s\+$//e]],
@@ -87,18 +87,18 @@ end
 -- Bind the completion function to a key mapping
 local opts =  { noremap = true, silent = true }
 vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a', opts) -- maps autocomplete to "ctrl-space"
-vim.api.nvim_set_keymap('i', '<C-i>', '<Esc>:lua vim.lsp.buf.code_action()<CR>a', opts)
+vim.api.nvim_set_keymap('i', '<A-i>', '<Esc>:lua vim.lsp.buf.code_action()<CR>a', opts)
 vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh<CR>', opts) -- maps tree refresh to "ctrl-l"
 vim.api.nvim_set_keymap('n', '<A-t>', ':NvimTreeToggle<CR>', opts) -- maps tree toggle to "alt-t"
 
--- run lint fix for ts and js on file save 
+-- run lint fix for ts and js on file save
 vim.cmd([[
   let g:ale_fixers = {
   \ 'javascript': ['eslint'],
   \ 'typescript': ['eslint'],
   \ 'json': ['prettier'],
   \ 'typescriptreact': ['eslint'],
-  \ }  
+  \ }
 ]])
 
 vim.cmd("let g:ale_sign_error = '❌'")
