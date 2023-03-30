@@ -86,7 +86,7 @@ local opts =  { noremap = true, silent = true }
 vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a', opts) -- maps autocomplete to "ctrl-space"
 vim.api.nvim_set_keymap('i', '<C-i>', '<Esc>:lua vim.lsp.buf.code_action()<CR>a', opts)
 vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh<CR>', opts) -- maps tree refresh to "ctrl-l"
-vim.api.nvim_set_keymap('n', '<C-t>', ':NvimTreeToggle<CR>', opts) -- maps tree toggle to "ctrl-t"
+vim.api.nvim_set_keymap('n', '<A-t>', ':NvimTreeToggle<CR>', opts) -- maps tree toggle to "alt-t"
 
 -- run lint fix for ts and js on file save 
 vim.cmd([[
