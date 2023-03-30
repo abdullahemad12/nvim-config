@@ -66,10 +66,13 @@ autocmd('BufEnter', {
 })
 
 
--- autocmd BufEnter * set relativenumber
+-- remove trailing spaces on save 
+vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+  pattern = { "*" },
+  command = [[%s/\s\+$//e]],
+})
 
 
---require('solarized').set()
 -- Set up mappings for LSP-based autocompletion
 function OnDemandCompletion()
   -- Check if the current buffer has omnifunc set
