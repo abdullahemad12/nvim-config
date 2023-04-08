@@ -11,6 +11,7 @@ require('packer').startup(function()
     use 'nvim-tree/nvim-tree.lua' -- File explorer tree
     use 'prettier/vim-prettier'
     use 'dense-analysis/ale' -- for linting
+    use 'm4xshen/autoclose.nvim' -- for auto closing tags and brackets
 end)
 
 local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
@@ -21,9 +22,13 @@ vim.opt.autoindent = true
 vim.opt.shiftwidth = 2
 vim.opt.smarttab = true
 
+-- auto close tags configurations
+require('autoclose').setup {}
+
 -- LSP Configurations
 require'lspconfig'.kotlin_language_server.setup {}
 require'lspconfig'.tsserver.setup {}
+require'lspconfig'.rust_analyzer.setup({})
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
