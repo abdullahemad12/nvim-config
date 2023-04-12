@@ -31,7 +31,7 @@ local lsp_config = require'lspconfig'
 lsp_config.kotlin_language_server.setup {}
 lsp_config.tsserver.setup {}
 lsp_config.rust_analyzer.setup {}
-lsp_config.pyright {}
+lsp_config.pyright.setup {}
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
