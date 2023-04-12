@@ -26,9 +26,12 @@ vim.opt.smarttab = true
 require('autoclose').setup {}
 
 -- LSP Configurations
-require'lspconfig'.kotlin_language_server.setup {}
-require'lspconfig'.tsserver.setup {}
-require'lspconfig'.rust_analyzer.setup({})
+local lsp_config = require'lspconfig'
+
+lsp_config.kotlin_language_server.setup {}
+lsp_config.tsserver.setup {}
+lsp_config.rust_analyzer.setup {}
+lsp_config.pyright {}
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
