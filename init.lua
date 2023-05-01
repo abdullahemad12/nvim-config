@@ -12,6 +12,7 @@ require('packer').startup(function()
     use 'prettier/vim-prettier'
     use 'dense-analysis/ale' -- for linting
     use 'm4xshen/autoclose.nvim' -- for auto closing tags and brackets
+    use 'fatih/vim-go' -- go vim utilities
 end)
 
 local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
@@ -27,11 +28,32 @@ require('autoclose').setup {}
 
 -- LSP Configurations
 local lsp_config = require'lspconfig'
+local util = require 'lspconfig/util'
 
 lsp_config.kotlin_language_server.setup {}
 lsp_config.tsserver.setup {}
 lsp_config.rust_analyzer.setup {}
 lsp_config.pyright.setup {}
+
+
+lsp_config.gopls.setup {
+  cmd = {"gopls", "serve"},
+  filetypes = {"go", "gomod"},
+  root_dir = util.root_pattern("go.work", "go.mod", ".git"),
+  settings = {
+    editor = {
+      tabSize = 2,
+      insertSpaces = true
+    },
+    gopls = {
+      analyses = {
+	unusedparams = true,
+      },
+      staticcheck = true,
+    },
+  },
+}
+
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
