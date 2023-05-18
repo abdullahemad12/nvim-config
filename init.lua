@@ -54,12 +54,12 @@ lsp_config.gopls.setup {
   },
 }
 
--- to Install the vue lsp run: npm install -g vue-language-server
-lsp_config.vetur.setup {
-  cmd = { 'vls' },
-  filetypes = { 'vue' },
-  root_dir = lspconfig.util.root_pattern('package.json', 'tsconfig.json', '.git')
-}
+-- to Install the vue lsp run: npm install -g vue-language-server (This is for vuejs2)
+-- lsp_config.vuels.setup {}
+
+-- To install vue3 lsp run: npm install -g @volar/vue-language-server
+require'lspconfig'.volar.setup{  }
+
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
