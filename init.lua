@@ -58,8 +58,11 @@ lsp_config.gopls.setup {
 -- lsp_config.vuels.setup {}
 
 -- To install vue3 lsp run: npm install -g @volar/vue-language-server
-require'lspconfig'.volar.setup{  }
+require'lspconfig'.volar.setup{}
 
+-- configuration for protobuf lsp
+-- to install bufls see: https://github.com/bufbuild/buf-language-server
+require'lspconfig'.bufls.setup{}
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
