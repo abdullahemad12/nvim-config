@@ -58,7 +58,32 @@ lsp_config.gopls.setup {
 -- lsp_config.vuels.setup {}
 
 -- To install vue3 lsp run: npm install -g @volar/vue-language-server
-require'lspconfig'.volar.setup{}
+
+-- needs some improvement but the gist is that this function searches for the typescript module
+-- recursively in all parents. Mainly because in a mono repo, it may not be contained in the first node_modules found
+local util = require 'lspconfig.util'
+local function get_typescript_server_path(root_dir)
+  local found_ts = ''
+  local function check_dir(path)
+    found_ts =  util.path.join(path, 'node_modules', 'typescript', 'lib')
+    if util.path.exists(found_ts) then
+      return path
+    end
+  end
+
+  if util.search_ancestors(root_dir, check_dir) then
+    return found_ts
+  else
+    return ''
+  end
+end
+
+
+require'lspconfig'.volar.setup{
+  on_new_config = function(new_config, new_root_dir)
+    new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
+  end,
+}
 
 -- configuration for protobuf lsp
 -- to install bufls see: https://github.com/bufbuild/buf-language-server
@@ -135,6 +160,7 @@ vim.cmd([[
   let g:ale_fixers = {
   \ 'javascript': ['eslint'],
   \ 'typescript': ['eslint'],
+  \ 'vue': ['eslint'],
   \ 'json': ['prettier'],
   \ 'typescriptreact': ['eslint'],
   \ }
@@ -144,4 +170,3 @@ vim.cmd("let g:ale_sign_error = '❌'")
 vim.cmd("let g:ale_sign_warning = '⚠️'")
 vim.cmd('let g:ale_fix_on_save = 1')
 vim.cmd('let g:ale_lint_on_save = 1')
-
