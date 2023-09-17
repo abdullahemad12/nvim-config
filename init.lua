@@ -33,6 +33,11 @@ local util = require 'lspconfig/util'
 lsp_config.kotlin_language_server.setup {}
 lsp_config.tsserver.setup {}
 lsp_config.rust_analyzer.setup {}
+
+-- Define an autocommand to format Rust files on save
+vim.cmd [[autocmd BufWritePre *.rs lua vim.lsp.buf.format()]]
+
+
 lsp_config.pyright.setup {}
 
 
