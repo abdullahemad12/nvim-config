@@ -32,7 +32,11 @@ local util = require 'lspconfig/util'
 
 lsp_config.kotlin_language_server.setup {}
 lsp_config.tsserver.setup {}
-lsp_config.rust_analyzer.setup {}
+lsp_config.rust_analyzer.setup {
+  file = {
+    excludeDirs = { "redox-exec" }
+  }
+}
 
 -- Define an autocommand to format Rust files on save
 vim.cmd [[autocmd BufWritePre *.rs lua vim.lsp.buf.format()]]
@@ -159,6 +163,8 @@ vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a',
 vim.api.nvim_set_keymap('i', '<A-i>', '<Esc>:lua vim.lsp.buf.code_action()<CR>a', opts)
 vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh<CR>', opts) -- maps tree refresh to "ctrl-l"
 vim.api.nvim_set_keymap('n', '<A-t>', ':NvimTreeToggle<CR>', opts) -- maps tree toggle to "alt-t"
+vim.api.nvim_set_keymap('n', '<C-A-n>', ':lnext<CR>', opts) -- maps getting next error to ctrl-alt-n
+vim.api.nvim_set_keymap('n', '<C-A-m>', ':lprev<CR>', opts) -- maps getting previous error to ctrl-alt-m
 
 -- run lint fix for ts and js on file save
 vim.cmd([[
