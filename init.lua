@@ -8,11 +8,14 @@ require('packer').startup(function()
     use 'hrsh7th/nvim-compe' -- auto completion plugin
     use 'altercation/vim-colors-solarized' -- Solarized theme for VIM
     use 'jeffkreeftmeijer/vim-numbertoggle' -- toggles the line number display between relative and absolute
+    use 'nvim-tree/nvim-web-devicons' -- file icons
     use 'nvim-tree/nvim-tree.lua' -- File explorer tree
     use 'prettier/vim-prettier'
     use 'dense-analysis/ale' -- for linting
     use 'm4xshen/autoclose.nvim' -- for auto closing tags and brackets
     use 'fatih/vim-go' -- go vim utilities
+    use 'lewis6991/gitsigns.nvim' -- git status for barbar
+    use 'romgrk/barbar.nvim' -- buffer management plugin
 end)
 
 local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
@@ -40,7 +43,6 @@ lsp_config.rust_analyzer.setup {
 
 -- Define an autocommand to format Rust files on save
 vim.cmd [[autocmd BufWritePre *.rs lua vim.lsp.buf.format()]]
-
 
 lsp_config.pyright.setup {}
 
@@ -121,9 +123,6 @@ require("nvim-tree").setup({
   renderer = {
     group_empty = true,
   },
-  filters = {
-    dotfiles = true,
-  },
 })
 
 vim.cmd('NvimTreeToggle') -- open tree by default
@@ -166,10 +165,15 @@ end
 local opts =  { noremap = true, silent = true }
 vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a', opts) -- maps autocomplete to "ctrl-space"
 vim.api.nvim_set_keymap('i', '<A-i>', '<Esc>:lua vim.lsp.buf.code_action()<CR>a', opts)
+vim.api.nvim_set_keymap('n', 'F', '<Esc>:lua vim.lsp.buf.references()<CR>', opts) -- ctrl-o jumps back to the previous location
 vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh<CR>', opts) -- maps tree refresh to "ctrl-l"
 vim.api.nvim_set_keymap('n', '<A-t>', ':NvimTreeToggle<CR>', opts) -- maps tree toggle to "alt-t"
 vim.api.nvim_set_keymap('n', '<C-A-n>', ':lnext<CR>', opts) -- maps getting next error to ctrl-alt-n
 vim.api.nvim_set_keymap('n', '<C-A-m>', ':lprev<CR>', opts) -- maps getting previous error to ctrl-alt-m
+vim.api.nvim_set_keymap('n', '<', ':bp<CR>', opts) -- maps going to the previous buffer to <
+vim.api.nvim_set_keymap('n', '>', ':bn<CR>', opts) -- maps going to the next buffer to >
+vim.api.nvim_set_keymap('n', '<C-A-x>', ':bd<CR>', opts) -- maps deleting a buffer to ctrl-alt-x
+vim.api.nvim_set_keymap('n', '<C-A-p>', ':tabnew<CR>', opts) -- maps opening new tab to ctrl-alt-p
 
 -- run lint fix for ts and js on file save
 vim.cmd([[
