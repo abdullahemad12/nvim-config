@@ -16,6 +16,7 @@ require('packer').startup(function()
     use 'fatih/vim-go' -- go vim utilities
     use 'lewis6991/gitsigns.nvim' -- git status for barbar
     use 'romgrk/barbar.nvim' -- buffer management plugin
+    use 'rust-lang/rust.vim' -- rust configuration for vim
 end)
 
 local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
@@ -42,7 +43,8 @@ lsp_config.rust_analyzer.setup {
 }
 
 -- Define an autocommand to format Rust files on save
-vim.cmd [[autocmd BufWritePre *.rs lua vim.lsp.buf.format()]]
+-- vim.cmd [[autocmd BufWritePre *.rs RustFmt]]
+vim.g.rustfmt_autosave = 1
 
 lsp_config.pyright.setup {}
 
