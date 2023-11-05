@@ -165,7 +165,7 @@ end
 local opts =  { noremap = true, silent = true }
 vim.api.nvim_set_keymap('i', '<C-Space>', '<Esc>:lua OnDemandCompletion()<CR>a', opts) -- maps autocomplete to "ctrl-space"
 vim.api.nvim_set_keymap('i', '<A-i>', '<Esc>:lua vim.lsp.buf.code_action()<CR>a', opts)
-vim.api.nvim_set_keymap('n', 'F', '<Esc>:lua vim.lsp.buf.references()<CR>', opts) -- ctrl-o jumps back to the previous location
+vim.api.nvim_set_keymap('n', 'F', '<Esc>:lua vim.lsp.buf.references()<CR>', opts) -- displays usage of variables, functions, etc..
 vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh<CR>', opts) -- maps tree refresh to "ctrl-l"
 vim.api.nvim_set_keymap('n', '<A-t>', ':NvimTreeToggle<CR>', opts) -- maps tree toggle to "alt-t"
 vim.api.nvim_set_keymap('n', '<C-A-n>', ':lnext<CR>', opts) -- maps getting next error to ctrl-alt-n
