@@ -69,7 +69,8 @@ lsp_config.gopls.setup {
 
 -- c/c++ lsp
 lsp_config.clangd.setup {
-  cmd = {"clangd"}
+  cmd = {"clangd"},
+  root_dir = util.root_pattern(".git"),
 }
 
 -- to Install the vue lsp run: npm install -g vue-language-server (This is for vuejs2)
