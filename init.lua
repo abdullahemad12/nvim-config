@@ -17,10 +17,13 @@ require('packer').startup(function()
     use 'lewis6991/gitsigns.nvim' -- git status for barbar
     use 'romgrk/barbar.nvim' -- buffer management plugin
     use 'rust-lang/rust.vim' -- rust configuration for vim
+    use { 'codota/tabnine-nvim', run = "./dl_binaries.sh" } -- tabnine AI copilot
+    use 'Exafunction/windsurf.vim' -- codeium AI copilot
 end)
 
 local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
 local autocmd = vim.api.nvim_create_autocmd   -- Create autocommand
+
 
 -- Indentation configurations
 vim.opt.autoindent = true
@@ -35,7 +38,7 @@ local lsp_config = require'lspconfig'
 local util = require 'lspconfig/util'
 
 lsp_config.kotlin_language_server.setup {}
-lsp_config.tsserver.setup {}
+lsp_config.ts_ls.setup {}
 lsp_config.rust_analyzer.setup {
   file = {
     excludeDirs = { "redox-exec" }
@@ -97,6 +100,22 @@ local function get_typescript_server_path(root_dir)
   end
 end
 
+require'tabnine'.setup{
+  disable_auto_comment=true,
+  accept_keymap="<Tab>",
+  dismiss_keymap = "<C-]>",
+  debounce_ms = 800,
+  suggestion_color = {gui = "#808080", cterm = 244},
+  exclude_filetypes = {"TelescopePrompt", "NvimTree"},
+  log_file_path = nil, -- absolute path to Tabnine log file
+  ignore_certificate_errors = false,
+  -- workspace_folders = {
+  --   paths = { "/your/project" },
+  --   get_paths = function()
+  --       return { "/your/project" }
+  --   end,
+  -- },
+}
 
 require'lspconfig'.volar.setup{
   on_new_config = function(new_config, new_root_dir)
@@ -106,7 +125,7 @@ require'lspconfig'.volar.setup{
 
 -- configuration for protobuf lsp
 -- to install bufls see: https://github.com/bufbuild/buf-language-server
-require'lspconfig'.bufls.setup{}
+require'lspconfig'.buf_ls.setup{}
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
