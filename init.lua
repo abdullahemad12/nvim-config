@@ -19,6 +19,7 @@ require('packer').startup(function()
     use 'rust-lang/rust.vim' -- rust configuration for vim
     use { 'codota/tabnine-nvim', run = "./dl_binaries.sh" } -- tabnine AI copilot
     use 'Exafunction/windsurf.vim' -- codeium AI copilot
+    use 'johnseth97/codex.nvim'
 end)
 
 local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
@@ -34,25 +35,48 @@ vim.opt.smarttab = true
 require('autoclose').setup {}
 
 -- LSP Configurations
-local lsp_config = require'lspconfig'
+local lsp_config = vim.lsp.config
 local util = require 'lspconfig/util'
 
-lsp_config.kotlin_language_server.setup {}
-lsp_config.ts_ls.setup {}
-lsp_config.rust_analyzer.setup {
+lsp_config.kotlin_language_server = {}
+lsp_config.ts_ls = {}
+lsp_config.rust_analyzer = {
   file = {
     excludeDirs = { "redox-exec" }
   }
+}
+
+-- codex (GPT AI Copilot)
+require('codex').status() -- drop in to your lualine sections
+require('codex').setup{
+  keys = {
+    {
+      '<leader>cc', -- Change this to your preferred keybinding
+      function() require('codex').toggle() end,
+      desc = 'Toggle Codex popup',
+    },
+  },
+  opts = {
+    keymaps     = {
+      toggle = nil, -- Keybind to toggle Codex window (Disabled by default, watch out for conflicts)
+      quit = '<C-q>', -- Keybind to close the Codex window (default: Ctrl + q)
+    },         -- Disable internal default keymap (<leader>cc -> :CodexToggle)
+    border      = 'rounded',  -- Options: 'single', 'double', or 'rounded'
+    width       = 0.8,        -- Width of the floating window (0.0 to 1.0)
+    height      = 0.8,        -- Height of the floating window (0.0 to 1.0)
+    model       = nil,        -- Optional: pass a string to use a specific model (e.g., 'o3-mini')
+    autoinstall = true,       -- Automatically install the Codex CLI if not found
+  },
 }
 
 -- Define an autocommand to format Rust files on save
 -- vim.cmd [[autocmd BufWritePre *.rs RustFmt]]
 vim.g.rustfmt_autosave = 1
 
-lsp_config.pyright.setup {}
+lsp_config.pyright = {}
 
 
-lsp_config.gopls.setup {
+lsp_config.gopls = {
   cmd = {"gopls", "serve"},
   filetypes = {"go", "gomod"},
   root_dir = util.root_pattern("go.work", "go.mod", ".git"),
@@ -71,7 +95,7 @@ lsp_config.gopls.setup {
 }
 
 -- c/c++ lsp
-lsp_config.clangd.setup {
+lsp_config.clangd = {
   cmd = {"clangd"},
   root_dir = util.root_pattern(".git"),
 }
@@ -100,24 +124,7 @@ local function get_typescript_server_path(root_dir)
   end
 end
 
-require'tabnine'.setup{
-  disable_auto_comment=true,
-  accept_keymap="<Tab>",
-  dismiss_keymap = "<C-]>",
-  debounce_ms = 800,
-  suggestion_color = {gui = "#808080", cterm = 244},
-  exclude_filetypes = {"TelescopePrompt", "NvimTree"},
-  log_file_path = nil, -- absolute path to Tabnine log file
-  ignore_certificate_errors = false,
-  -- workspace_folders = {
-  --   paths = { "/your/project" },
-  --   get_paths = function()
-  --       return { "/your/project" }
-  --   end,
-  -- },
-}
-
-require'lspconfig'.volar.setup{
+lsp_config.volar = {
   on_new_config = function(new_config, new_root_dir)
     new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
   end,
@@ -125,7 +132,7 @@ require'lspconfig'.volar.setup{
 
 -- configuration for protobuf lsp
 -- to install bufls see: https://github.com/bufbuild/buf-language-server
-require'lspconfig'.buf_ls.setup{}
+lsp_configbuf_ls = {}
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
