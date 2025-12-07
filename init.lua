@@ -154,7 +154,12 @@ require("nvim-tree").setup({
   },
 })
 
-vim.cmd('NvimTreeToggle') -- open tree by default
+vim.api.nvim_create_autocmd("VimEnter", {
+  callback = function()
+    vim.cmd("NvimTreeToggle")
+  end,
+})
+
 
 -- Show Line number
 vim.opt.number = true
