@@ -19,8 +19,18 @@ require('packer').startup(function()
     use 'rust-lang/rust.vim' -- rust configuration for vim
     use { 'codota/tabnine-nvim', run = "./dl_binaries.sh" } -- tabnine AI copilot
     use 'Exafunction/windsurf.vim' -- codeium AI copilot
-    use 'johnseth97/codex.nvim'
+    use {
+      'johnseth97/codex.nvim',
+      config = function()
+	  vim.keymap.set('i', '<C-j>', function () return vim.fn['codeium#Accept']() end, { expr = true, silent = true })
+      end
+    }
 end)
+
+
+-- windsurf Codeuim
+vim.g.codeium_disable_bindings = 1
+
 
 local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
 local autocmd = vim.api.nvim_create_autocmd   -- Create autocommand
