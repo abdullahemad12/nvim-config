@@ -31,10 +31,10 @@ end)
 -- windsurf Codeuim
 vim.g.codeium_disable_bindings = 1
 
-
 local augroup = vim.api.nvim_create_augroup   -- Create/get autocommand group
 local autocmd = vim.api.nvim_create_autocmd   -- Create autocommand
 
+vim.g.mapleader = " "
 
 -- Indentation configurations
 vim.opt.autoindent = true
@@ -241,6 +241,7 @@ vim.api.nvim_set_keymap('n', '>', ':bn<CR>', opts) -- maps going to the next buf
 vim.api.nvim_set_keymap('n', '<C-A-x>', ':bd<CR>', opts) -- maps deleting a buffer to ctrl-alt-x
 vim.api.nvim_set_keymap('n', '<C-A-p>', ':tabnew<CR>', opts) -- maps opening new tab to ctrl-alt-p
 vim.api.nvim_set_keymap('n', 'q', ':lua switch_case()<CR>', opts) -- switch between camel case and snake case
+vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts) -- rename / refactor a variable, function name, etc..
 
 -- run lint fix for ts and js on file save
 vim.cmd([[
