@@ -16,7 +16,6 @@ require('packer').startup(function()
     use 'fatih/vim-go' -- go vim utilities
     use 'lewis6991/gitsigns.nvim' -- git status for barbar
     use 'romgrk/barbar.nvim' -- buffer management plugin
-    use 'rust-lang/rust.vim' -- rust configuration for vim
     use { 'codota/tabnine-nvim', run = "./dl_binaries.sh" } -- tabnine AI copilot
     use 'Exafunction/windsurf.vim' -- codeium AI copilot
     use {
@@ -45,16 +44,27 @@ vim.opt.smarttab = true
 require('autoclose').setup {}
 
 -- LSP Configurations
-local lsp_config = vim.lsp.config
+local vim_lsp_config = vim.lsp.config
 local util = require 'lspconfig/util'
 
-lsp_config.kotlin_language_server = {}
-lsp_config.ts_ls = {}
-lsp_config.rust_analyzer = {
-  file = {
-    excludeDirs = { "redox-exec" }
-  }
-}
+vim_lsp_config.kotlin_language_server = {}
+vim_lsp_config.ts_ls = {}
+
+local lspconfig = require("lspconfig")
+lspconfig.rust_analyzer.setup({
+  -- Ensures rust-analyzer treats the top-level repo directory as the workspace root
+  root_dir = lspconfig.util.root_pattern("Cargo.toml", ".git"),
+  settings = {
+    ["rust-analyzer"] = {
+      files = {
+        excludeDirs = { "redox-exec" },
+      },
+      check = {
+        command = "clippy",
+      },
+    },
+  },
+})
 
 -- codex (GPT AI Copilot)
 require('codex').status() -- drop in to your lualine sections
@@ -83,10 +93,10 @@ require('codex').setup{
 -- vim.cmd [[autocmd BufWritePre *.rs RustFmt]]
 vim.g.rustfmt_autosave = 1
 
-lsp_config.pyright = {}
+vim_lsp_config.pyright = {}
 
 
-lsp_config.gopls = {
+vim_lsp_config.gopls = {
   cmd = {"gopls", "serve"},
   filetypes = {"go", "gomod"},
   root_dir = util.root_pattern("go.work", "go.mod", ".git"),
@@ -105,13 +115,13 @@ lsp_config.gopls = {
 }
 
 -- c/c++ lsp
-lsp_config.clangd = {
+vim_lsp_config.clangd = {
   cmd = {"clangd"},
   root_dir = util.root_pattern(".git"),
 }
 
 -- to Install the vue lsp run: npm install -g vue-language-server (This is for vuejs2)
--- lsp_config.vuels.setup {}
+-- vim_lsp_config.vuels.setup {}
 
 -- To install vue3 lsp run: npm install -g @volar/vue-language-server
 
@@ -134,7 +144,7 @@ local function get_typescript_server_path(root_dir)
   end
 end
 
-lsp_config.volar = {
+vim_lsp_config.volar = {
   on_new_config = function(new_config, new_root_dir)
     new_config.init_options.typescript.tsdk = get_typescript_server_path(new_root_dir)
   end,
@@ -142,7 +152,7 @@ lsp_config.volar = {
 
 -- configuration for protobuf lsp
 -- to install bufls see: https://github.com/bufbuild/buf-language-server
-lsp_configbuf_ls = {}
+vim_lsp_configbuf_ls = {}
 
 -- Theme configuration see dependencies
 vim.cmd('syntax enable')
