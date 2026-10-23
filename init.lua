@@ -66,6 +66,18 @@ lspconfig.rust_analyzer.setup({
   },
 })
 
+vim.api.nvim_create_autocmd("BufWritePre", {
+  pattern = "*.rs",
+  callback = function()
+    vim.lsp.buf.format({
+      async = false,
+      filter = function(client)
+        return client.name == "rust_analyzer"
+      end,
+    })
+  end,
+})
+
 -- codex (GPT AI Copilot)
 require('codex').status() -- drop in to your lualine sections
 require('codex').setup{
@@ -248,7 +260,7 @@ vim.api.nvim_set_keymap('n', '<C-A-n>', ':lnext<CR>', opts) -- maps getting next
 vim.api.nvim_set_keymap('n', '<C-A-m>', ':lprev<CR>', opts) -- maps getting previous error to ctrl-alt-m
 vim.api.nvim_set_keymap('n', '<', ':bp<CR>', opts) -- maps going to the previous buffer to <
 vim.api.nvim_set_keymap('n', '>', ':bn<CR>', opts) -- maps going to the next buffer to >
-vim.api.nvim_set_keymap('n', '<C-A-x>', ':bd<CR>', opts) -- maps deleting a buffer to ctrl-alt-x
+vim.api.nvim_set_keymap('n', '<C-A-x>', ':BufferClose<CR>', opts) -- maps deleting a buffer to ctrl-alt-x
 vim.api.nvim_set_keymap('n', '<C-A-p>', ':tabnew<CR>', opts) -- maps opening new tab to ctrl-alt-p
 vim.api.nvim_set_keymap('n', 'q', ':lua switch_case()<CR>', opts) -- switch between camel case and snake case
 vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts) -- rename / refactor a variable, function name, etc..
