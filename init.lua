@@ -50,10 +50,9 @@ local util = require 'lspconfig/util'
 vim_lsp_config.kotlin_language_server = {}
 vim_lsp_config.ts_ls = {}
 
-local lspconfig = require("lspconfig")
-lspconfig.rust_analyzer.setup({
+vim_lsp_config.rust_analyzer = {
   -- Ensures rust-analyzer treats the top-level repo directory as the workspace root
-  root_dir = lspconfig.util.root_pattern("Cargo.toml", ".git"),
+  root_dir = util.root_pattern("Cargo.toml", ".git"),
   settings = {
     ["rust-analyzer"] = {
       files = {
@@ -64,7 +63,7 @@ lspconfig.rust_analyzer.setup({
       },
     },
   },
-})
+}
 
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.rs",
@@ -258,8 +257,8 @@ vim.api.nvim_set_keymap('n', '<C-l>', ':NvimTreeRefresh<CR>', opts) -- maps tree
 vim.api.nvim_set_keymap('n', '<A-t>', ':NvimTreeToggle<CR>', opts) -- maps tree toggle to "alt-t"
 vim.api.nvim_set_keymap('n', '<C-A-n>', ':lnext<CR>', opts) -- maps getting next error to ctrl-alt-n
 vim.api.nvim_set_keymap('n', '<C-A-m>', ':lprev<CR>', opts) -- maps getting previous error to ctrl-alt-m
-vim.api.nvim_set_keymap('n', '<', ':bp<CR>', opts) -- maps going to the previous buffer to <
-vim.api.nvim_set_keymap('n', '>', ':bn<CR>', opts) -- maps going to the next buffer to >
+vim.api.nvim_set_keymap('n', '<', ':BufferPrevious<CR>', opts) -- maps going to the previous buffer to <
+vim.api.nvim_set_keymap('n', '>', ':BufferNext<CR>', opts) -- maps going to the next buffer to >
 vim.api.nvim_set_keymap('n', '<C-A-x>', ':BufferClose<CR>', opts) -- maps deleting a buffer to ctrl-alt-x
 vim.api.nvim_set_keymap('n', '<C-A-p>', ':tabnew<CR>', opts) -- maps opening new tab to ctrl-alt-p
 vim.api.nvim_set_keymap('n', 'q', ':lua switch_case()<CR>', opts) -- switch between camel case and snake case
