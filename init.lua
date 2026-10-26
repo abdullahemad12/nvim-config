@@ -50,32 +50,29 @@ local util = require 'lspconfig/util'
 vim_lsp_config.kotlin_language_server = {}
 vim_lsp_config.ts_ls = {}
 
-vim_lsp_config.rust_analyzer = {
-  -- Ensures rust-analyzer treats the top-level repo directory as the workspace root
-  root_dir = util.root_pattern("Cargo.toml", ".git"),
+--------------- Rust LSP Configurations ----------------------
+vim.lsp.config("rust_analyzer", {
+  root_markers = { "Cargo.toml", ".git" },
   settings = {
     ["rust-analyzer"] = {
       files = {
         excludeDirs = { "redox-exec" },
       },
       check = {
-        command = "clippy",
+        command = "clippy", -- Forces rust-analyzer to run clippy instead of cargo check
       },
     },
   },
-}
-
+})
+vim.lsp.enable("rust_analyzer")
 vim.api.nvim_create_autocmd("BufWritePre", {
   pattern = "*.rs",
   callback = function()
-    vim.lsp.buf.format({
-      async = false,
-      filter = function(client)
-        return client.name == "rust_analyzer"
-      end,
-    })
+    vim.lsp.buf.format({ async = false })
   end,
 })
+-------------------------------------------------------------
+
 
 -- codex (GPT AI Copilot)
 require('codex').status() -- drop in to your lualine sections
